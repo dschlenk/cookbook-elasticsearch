@@ -14,7 +14,7 @@ node.elasticsearch[:data][:devices].each do |device, params|
   # Create directory with proper permissions
   #
   directory params[:mount_path] do
-    owner node.elasticsearch[:user] and group node.elasticsearch[:user] and mode 0755
+    owner node['elasticsearch']['user'] and group node['elasticsearch']['user'] and mode 0755
     recursive true
   end
 
@@ -28,16 +28,16 @@ node.elasticsearch[:data][:devices].each do |device, params|
     action  [:mount, :enable]
 
     only_if { File.exists?(device) }
-    if node.elasticsearch[:path][:data].include?(params[:mount_path])
+    if node.['elasticsearch']['path']['data'].include?(params[:mount_path])
       Chef::Log.debug "Schedule Elasticsearch service restart..."
-      notifies :restart, 'service[elasticsearch]' unless node.elasticsearch[:skip_restart]
+      notifies :restart, 'service[elasticsearch]' unless node.['elasticsearch']['skip_restart']
     end
   end
 
   # Ensure proper permissions
   #
   directory params[:mount_path] do
-    owner node.elasticsearch[:user] and group node.elasticsearch[:user] and mode 0755
+    owner node['elasticsearch']['user'] and group node['elasticsearch']['user'] and mode 0755
     recursive true
   end
 end

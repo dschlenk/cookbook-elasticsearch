@@ -7,7 +7,7 @@
 # https://github.com/elasticsearch/elasticsearch/blob/master/config/elasticsearch.yml
 #
 # To set configurations not exposed by this template, set the
-# `node.elasticsearch[:custom_config]` attribute in your node configuration,
+# `node[:elasticsearch][:custom_config]` attribute in your node configuration,
 # `elasticsearch/settings` data bag, role/environment definition, etc:
 #
 #     // ...
@@ -38,7 +38,7 @@
 #################################### Paths ####################################
 
 <%= print_value 'path.conf' -%>
-<%= print_value 'path.data', (node.elasticsearch.path.data.is_a?(Array) ? node.elasticsearch.path.data.join(",") : node.elasticsearch.path.data) -%>
+<%= print_value 'path.data', (node[:elasticsearch][:path][:data].is_a?(Array) ? node[:elasticsearch][:path][:data].join(",") : node[:elasticsearch][:path][:data]) -%>
 <%= print_value 'path.work' -%>
 <%= print_value 'path.logs' -%>
 <%= print_value 'path.plugins' -%>
@@ -79,7 +79,7 @@
 
 ################################### Gateway ###################################
 
-<%= print_value 'gateway.type', node.elasticsearch[:gateway][:type] -%>
+<%= print_value 'gateway.type', node[:elasticsearch][:gateway][:type] -%>
 <%= print_value 'gateway.recover_after_nodes' -%>
 <%= print_value 'gateway.recover_after_time' -%>
 <%= print_value 'gateway.expected_nodes' -%>
@@ -93,14 +93,14 @@
 
 ################################## Discovery ##################################
 
-<%= print_value 'discovery.type', node.elasticsearch[:discovery][:type] -%>
+<%= print_value 'discovery.type', node[:elasticsearch][:discovery][:type] -%>
 
 <%= print_value 'discovery.zen.minimum_master_nodes' -%>
 <%= print_value 'discovery.zen.ping.timeout' -%>
 <%= print_value 'discovery.zen.ping.multicast.enabled' -%>
 <%= print_value 'discovery.zen.ping.unicast.hosts' -%>
 
-<%- if node.elasticsearch[:cloud] -%>
+<%- if node[:elasticsearch][:cloud] -%>
 <%= print_value 'cloud.node.auto_attributes' -%>
 <%= print_value 'cloud.aws.access_key' -%>
 <%= print_value 'cloud.aws.secret_key' -%>
@@ -111,9 +111,9 @@
 <%= print_value 'discovery.ec2.availability_zones' -%>
 <%= print_value 'discovery.ec2.any_group' -%>
 <%= print_value 'discovery.ec2.ping_timeout' -%>
-<%- node.elasticsearch[:discovery][:ec2][:tag].sort.each do |key, value| -%>
+<%- node[:elasticsearch][:discovery][:ec2][:tag].sort.each do |key, value| -%>
 discovery.ec2.tag.<%= key %>: <%= value %>
-<%- end unless node.elasticsearch[:discovery][:ec2][:tag].keys.empty? rescue false -%>
+<%- end unless node[:elasticsearch][:discovery][:ec2][:tag].keys.empty? rescue false -%>
 
 <%= print_value 'cloud.gce.project_id' -%>
 <%= print_value 'cloud.gce.zone' -%>
@@ -150,7 +150,7 @@ discovery.ec2.tag.<%= key %>: <%= value %>
 
 ################################## JMX ########################################
 
-<%- if node.elasticsearch[:jmx] -%>
+<%- if node[:elasticsearch][:jmx] -%>
 jmx.create_connector: true
 jmx.port: 9400-9500
 jmx.domain: elasticsearch
@@ -158,6 +158,6 @@ jmx.domain: elasticsearch
 
 ################################## Custom #####################################
 
-<% node.elasticsearch[:custom_config].sort.each do |key, value| %>
+<% node[:elasticsearch][:custom_config].sort.each do |key, value| %>
 <%= key %>: <%= value %>
 <% end %>
