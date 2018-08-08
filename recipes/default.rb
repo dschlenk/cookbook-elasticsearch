@@ -19,7 +19,7 @@ user node['elasticsearch']['user'] do
   comment "ElasticSearch User"
   home    "#{node['elasticsearch']['dir']}/elasticsearch"
   shell   "/bin/bash"
-  uid     node['elasticsearch'['uid']
+  uid     node['elasticsearch']['uid']
   gid     node['elasticsearch']['user']
   supports :manage_home => false
   action  :create
